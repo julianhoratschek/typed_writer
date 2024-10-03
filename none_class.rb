@@ -5,7 +5,7 @@ require 'singleton'
 class NoneClass
   include Singleton
 
-  def missing_method(_name, *_args, **_nargs)
+  def missing_method(_name, *, **)
     nil
   end
 end
