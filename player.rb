@@ -5,14 +5,23 @@ require_relative 'actor'
 class Player < Actor
   def initialize(**args)
     super
-    @that = nil
-    @recipient = nil
+    @current_action = nil
+    @that = none_class
+    @recipient = none_class
+  end
+
+  def action(action_name)
+    return @current_action unless action_name
+
+    @current_action = @actions.find { |_name, action| action.matches? action_name }
   end
 
   def process(line)
-    command, *args = line.split.map { |v| v.downcase }
-    command = command.to_sym
-    @actions[command]
+    command, *args = line.split.map(&:downcase)
+    return unless action(command)
+
+    @that, @recipient = *action.get_objects(self, args)
+    action.call(self)
   end
 end
 

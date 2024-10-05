@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'action_object'
 
 class GameObject
   def initialize(args)
@@ -25,14 +26,15 @@ class GameObject
       when String then self.class.define_method(name, proc { action })
       when Proc then self.class.define_method(name, action)
       when Hash
-        @actions[name] = ActionObject.new(
-          names: action[:names],
-          ignore: action[:ignore],
-          action: action[:action]
-        )
+        @actions[name] = ActionObject.new(names: action[:names], ignore: action[:ignore], action: action[:action])
       end
     end
   end
+
+
+  protected
+
+
 
 
   public
